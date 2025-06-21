@@ -16,7 +16,6 @@ public function up()
         $table->string('nama_pemesan');
         $table->string('email');
         $table->date('tanggal_reservasi');
-        $table->timestamps();
     });
 }
 
