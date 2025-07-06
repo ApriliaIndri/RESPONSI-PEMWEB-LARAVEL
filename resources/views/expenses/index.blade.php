@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Daftar Pengeluaran</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #6fb9cf 0%, #8fb3d8 40%, #a9aedb 70%, #baa8dd 100%);
+            background-size: 100% 200%;
+            background-repeat: no-repeat;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 960px;
+        }
+
+        .table thead, .table tbody, .table tr, .table td, .table th {
+            background-color: transparent !important;
+            border-color: black;
+            color: #000;
+        }
+
+        .table {
+            box-shadow: none;
+            margin-top: 40px;
+        }
+
+        .btn-custom {
+            border-radius: 10px;
+            padding: 6px 16px;
+            background-color: #66aaff;
+            border: 1px solid #66aaff;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #3399ff;
+            border-color: #3399ff;
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 40px;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .text-custom-muted {
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Data Pengeluaran Harian</h2>
+
+        <div class="mb-4 text-center">
+            <a href="{{ route('expenses.create') }}" class="btn btn-primary btn-custom">+ Tambah Pengeluaran</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle text-center shadow-sm">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Judul</th>
+                        <th>Jumlah (Rp)</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($expenses as $expense)
+                        <tr>
+                            <td>{{ $expense->tanggal }}</td>
+                            <td>{{ $expense->judul }}</td>
+                            <td>Rp {{ number_format($expense->jumlah, 0, ',', '.') }}</td>
+                            <td>
+                                <a href="{{ route('expenses.edit', $expense->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form method="POST" action="{{ route('expenses.destroy', $expense->id) }}" style="display:inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-custom-muted">⚠️ Belum ada data pengeluaran.</td>
+                        </tr>
+                    @endforelse
+                    <tr class="table-info">
+                        <td colspan="2"><strong>Total</strong></td>
+                        <td colspan="2"><strong>Rp {{ number_format($total, 0, ',', '.') }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
